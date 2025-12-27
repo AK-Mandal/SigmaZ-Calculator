@@ -213,7 +213,12 @@ def main():
     calc = Calculator()
     calc.setWindowTitle("SigmaZ")
     calc.setGeometry(625, 400, 500, 600)
-    calc.setWindowIcon(QIcon("CoolCalIcon.ico"))
+
+    icon_path = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "SigmaZ_icon.ico")
+    calc.setWindowIcon(QIcon(icon_path))
+    
     calc.show()
     sys.exit(app.exec_())
 if __name__ == '__main__':
