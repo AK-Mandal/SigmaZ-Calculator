@@ -73,6 +73,7 @@ QPushButton[text="^"] {
     background-color: #0f766e; 
     color: white;
 }
+
 QPushButton[text="sin"],
 QPushButton[text="cos"],
 QPushButton[text="tan"]{
