@@ -35,12 +35,15 @@ class Calculator(QWidget):
         calc.buttonbackspace = QPushButton("←", calc)
         calc.buttonlog = QPushButton("log", calc)
         calc.buttonln = QPushButton("ln", calc)
-        
+        calc.buttonsin = QPushButton("sin", calc)
+        calc.buttoncos = QPushButton("cos", calc)
+        calc.buttontan = QPushButton("tan", calc)
+
         calc.all_button = [calc.button0 ,calc.button1 ,calc.button2 ,calc.button3 ,calc.button4 ,calc.button5 ,
                       calc.button6 ,calc.button7 ,calc.button8 ,calc.button9 ,calc.buttondot ,calc.buttonadd ,
                       calc.buttonsub ,calc.buttonmul ,calc.buttondiv ,calc.buttonclear ,calc.buttonpower ,
                       calc.buttonlog ,calc.buttonln ,calc.buttonbracket1 ,calc.buttonbracket2 ,calc.buttonequal ,
-                      calc.buttonbackspace ,calc.buttonpercent]
+                      calc.buttonbackspace ,calc.buttonpercent, calc.buttontan, calc.buttonsin, calc.buttoncos ]
         for button in calc.all_button:
             button.clicked.connect(calc.ButtonClicked)
             button.clicked.connect(calc.SoundEffects)
@@ -65,30 +68,42 @@ class Calculator(QWidget):
 
     def ButtonLayout(calc):
         Grid = QGridLayout()
-        Grid.addWidget(calc.button0, 6, 0)
-        Grid.addWidget(calc.button1, 5, 0)
-        Grid.addWidget(calc.button2, 5, 1)
-        Grid.addWidget(calc.button3, 5, 2)
-        Grid.addWidget(calc.button4, 4, 0)
-        Grid.addWidget(calc.button5, 4, 1)
-        Grid.addWidget(calc.button6, 4, 2)
+
+        Grid.addWidget(calc.buttonlog, 0, 0)
+        Grid.addWidget(calc.buttonpercent, 0, 2 , 1, 2)
+        
+
+        
+        Grid.addWidget(calc.buttonsin, 1, 0)
+        Grid.addWidget(calc.buttoncos, 1, 1)
+        Grid.addWidget(calc.buttontan, 1, 2)
+        Grid.addWidget(calc.buttonbackspace, 1, 3)
+
+        Grid.addWidget(calc.buttonbracket1, 2, 0)
+        Grid.addWidget(calc.buttonbracket2, 2, 1)
+        Grid.addWidget(calc.buttonpower, 2, 2)
+        Grid.addWidget(calc.buttonclear, 2, 3)
+
         Grid.addWidget(calc.button7, 3, 0)
         Grid.addWidget(calc.button8, 3, 1)
         Grid.addWidget(calc.button9, 3, 2)
+        Grid.addWidget(calc.buttondiv, 3, 3)
+
+        Grid.addWidget(calc.button4, 4, 0)
+        Grid.addWidget(calc.button5, 4, 1)
+        Grid.addWidget(calc.button6, 4, 2)
+        Grid.addWidget(calc.buttonmul, 4, 3)
+
+        Grid.addWidget(calc.button1, 5, 0)
+        Grid.addWidget(calc.button2, 5, 1)
+        Grid.addWidget(calc.button3, 5, 2)
+        Grid.addWidget(calc.buttonsub, 5, 3)
+
+        Grid.addWidget(calc.button0, 6, 0)
         Grid.addWidget(calc.buttondot, 6, 1)
         Grid.addWidget(calc.buttonadd, 6, 3)
-        Grid.addWidget(calc.buttonsub, 5, 3)
-        Grid.addWidget(calc.buttonmul, 4, 3)
-        Grid.addWidget(calc.buttondiv, 3, 3)
-        Grid.addWidget(calc.buttonclear, 2, 2)
         Grid.addWidget(calc.buttonequal, 6, 2)
-        Grid.addWidget(calc.buttonpercent, 2, 1)
-        Grid.addWidget(calc.buttonpower, 2, 0)
-        Grid.addWidget(calc.buttonbracket1, 1, 0)
-        Grid.addWidget(calc.buttonbracket2, 1, 1)
-        Grid.addWidget(calc.buttonbackspace, 2, 3)
-        Grid.addWidget(calc.buttonlog, 1, 2)
-        Grid.addWidget(calc.buttonln, 1, 3)
+
         Grid.setSpacing(12)
         Grid.setContentsMargins(10, 10, 10, 10)
 
@@ -104,6 +119,7 @@ class Calculator(QWidget):
         MainLayout.addWidget(calculator_screen_container)
         MainLayout.addLayout(Grid)
         calc.setLayout(MainLayout)
+
     
 
     def Style(calc):
@@ -212,7 +228,7 @@ def main():
     app = QApplication(sys.argv)
     calc = Calculator()
     calc.setWindowTitle("SigmaZ")
-    calc.setGeometry(625, 400, 500, 600)
+    calc.setGeometry(625, 300, 500, 600)
 
     icon_path = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
