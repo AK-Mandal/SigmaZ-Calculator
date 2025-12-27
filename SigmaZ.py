@@ -70,6 +70,7 @@ class Calculator(QWidget):
         Grid = QGridLayout()
 
         Grid.addWidget(calc.buttonlog, 0, 0)
+        Grid.addWidget(calc.buttonln, 0, 1)
         Grid.addWidget(calc.buttonpercent, 0, 2 , 1, 2)
         
 
