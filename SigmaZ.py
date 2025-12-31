@@ -223,7 +223,6 @@ class Calculator(QWidget):
                         # Special rule for %: only allow operators after it
                         if current_text[-1] == "%" and input_char not in "+-×/":
                             return
-                            
                         calc.display.setText(current_text + input_char)
 
             except ZeroDivisionError:
@@ -280,7 +279,7 @@ def main():
     app = QApplication(sys.argv)
     calc = Calculator()
     calc.setWindowTitle("SigmaZ")
-    calc.setFixedSize(350, 500)
+    calc.resize(350, 300)
     icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "SigmaZ_icon.ico")
     calc.setWindowIcon(QIcon(icon_path))
     calc.show()
