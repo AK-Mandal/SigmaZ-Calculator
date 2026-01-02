@@ -1,4 +1,4 @@
-🧮 SigmaZ Calculator
+#SigmaZ Calculator
 
 Latest Version: Beta 2.0.0
 
@@ -15,8 +15,8 @@ Latest Version: Beta 2.0.0
 
 SigmaZ is a modern, feature-rich calculator built with Python and PyQt6, designed to combine a clean interface with powerful mathematical capabilities. It supports both standard scientific calculations and polynomial equation solving in a single application.
 
-✨ Features
-🔹 Normal (Scientific) Mode
+ #Features
+ Normal (Scientific) Mode
 
 Basic arithmetic: + − × ÷
 
@@ -41,7 +41,7 @@ Calculation history (last 3 expressions)
 
 
 
-🔹 Polynomial Mode
+ #Polynomial Mode
 
 Solve algebraic equations involving x
 
@@ -65,7 +65,7 @@ Clean result formatting
 
 
 
-🔊 Audio Feedback
+#Audio Feedback
 
 Button click sound effects
 
@@ -80,7 +80,7 @@ Clear / backspace actions
 
 
 
-🎨 Interface
+# Interface
 
 Clean and modern UI
 
@@ -92,7 +92,10 @@ Styled using QSS
 
 Custom application icon
 
-🛠️ Built With
+
+
+
+# Built With
 
 Python 3
 
@@ -105,19 +108,19 @@ PyInstaller (for distribution)
 
 
 
-🚀 Installation
-🔧 From Source
+ #Installation
+ From Source
 pip install pyqt6 sympy
 python SigmaZ.py
 
-📦 Windows Installer
+Windows Installer
 
 Download the installer from the Releases section and follow the setup instructions.
 
 
 
 
-⚠️ Beta Notice
+ #Beta Notice
 
 This is Beta 2.0.0, which means:
 
@@ -130,7 +133,7 @@ Feedback and bug reports are welcome
 
 
 
-📌 Planned Improvements
+# Planned Improvements
 
 Better error messages
 
@@ -145,7 +148,7 @@ Performance optimizations
 
 
 
-📄 License
+ #License
 
 This project is for educational and personal use.
 License details will be finalized in a future release.
@@ -153,7 +156,7 @@ License details will be finalized in a future release.
 
 
 
-⭐ Support
+ #Support
 
 If you like this project:
 
