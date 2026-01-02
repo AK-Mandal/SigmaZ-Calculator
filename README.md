@@ -38,6 +38,9 @@ Smart auto-bracket insertion
 
 Calculation history (last 3 expressions)
 
+
+
+
 🔹 Polynomial Mode
 
 Solve algebraic equations involving x
@@ -59,6 +62,9 @@ Multiple solutions supported
 
 Clean result formatting
 
+
+
+
 🔊 Audio Feedback
 
 Button click sound effects
@@ -70,6 +76,9 @@ Numbers
 Operators
 
 Clear / backspace actions
+
+
+
 
 🎨 Interface
 
@@ -93,6 +102,9 @@ SymPy (for symbolic mathematics)
 
 PyInstaller (for distribution)
 
+
+
+
 🚀 Installation
 🔧 From Source
 pip install pyqt6 sympy
@@ -101,6 +113,9 @@ python SigmaZ.py
 📦 Windows Installer
 
 Download the installer from the Releases section and follow the setup instructions.
+
+
+
 
 ⚠️ Beta Notice
 
@@ -111,6 +126,9 @@ Core features are stable
 UI and behavior may still be refined
 
 Feedback and bug reports are welcome
+
+
+
 
 📌 Planned Improvements
 
@@ -124,10 +142,16 @@ UI animations and themes
 
 Performance optimizations
 
+
+
+
 📄 License
 
 This project is for educational and personal use.
 License details will be finalized in a future release.
+
+
+
 
 ⭐ Support
 
