@@ -1,6 +1,7 @@
 import math
 import sys
 import os
+import sympy
 from PyQt6.QtWidgets import (
     QApplication, QWidget, QLabel, QPushButton,
     QGridLayout, QStackedWidget, QVBoxLayout, QLineEdit)
@@ -12,6 +13,10 @@ from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 class Calculator(QWidget):
     def __init__(calc):
         super().__init__()
+        #Track current mode to handle button behavior differently
+        calc.current_mode = "normal"  # Can be "normal" or "poly"
+        
+        #normal buttons
         calc.button0 = QPushButton("0", calc)
         calc.button1 = QPushButton("1", calc)
         calc.button2 = QPushButton("2", calc)
@@ -54,6 +59,9 @@ class Calculator(QWidget):
             button.clicked.connect(calc.DisplayText)
             button.clicked.connect(calc.SoundEffects)
 
+        calc.buttonmode = QPushButton("mode", calc)
+        calc.buttonmode.clicked.connect(calc.mode_toggle)
+
         calc.display = QLineEdit(calc)
         calc.display.setReadOnly(True)
         calc.display.setAlignment(Qt.AlignmentFlag.AlignRight)
@@ -66,16 +74,46 @@ class Calculator(QWidget):
         calc.history_list = []
         calc.history.setObjectName("history")
 
-        calc.ButtonLayout()
+        #StackedWidget setup for swithing modes
+        calc.StackedWidget = QStackedWidget(calc)
+        calc.normal_mode = QWidget()
+        calc.normal_mode_layout()
+        calc.poly_mode = QWidget()
+        calc.poly_mode_layout()
+        calc.StackedWidget.addWidget(calc.normal_mode)
+        calc.StackedWidget.addWidget(calc.poly_mode)
+
+        #Layout setup
+        container = QWidget()
+        container.setObjectName("calculator_screen_container")
+        layout = QVBoxLayout(container)
+        layout.addWidget(calc.history)
+        layout.addWidget(calc.display)
+
+        main = QVBoxLayout()
+        main.setSpacing(12)
+        main.addWidget(container)
+        main.addWidget(calc.StackedWidget)
+        calc.setLayout(main)
+
         calc.Style()
         calc.initSound()
 
-    def ButtonLayout(calc):
-        Grid = QGridLayout()
+    def mode_toggle(calc):
+        current_mode = calc.StackedWidget.currentIndex()
+        calc.StackedWidget.setCurrentIndex(1 - current_mode)
+        # mode tracker
+        calc.current_mode = "poly" if current_mode == 0 else "normal"
+        # Clear display when switching modes
+        calc.display.setText("0")
 
-        Grid.addWidget(calc.buttonsin, 0, 0)
-        Grid.addWidget(calc.buttoncos, 0, 1)
-        Grid.addWidget(calc.buttontan, 0, 2, 1, 2)
+    def normal_mode_layout(calc):
+        Grid = QGridLayout(calc.normal_mode)
+
+        Grid.addWidget(calc.buttonmode, 0, 0)
+        Grid.addWidget(calc.buttonsin, 0, 1)
+        Grid.addWidget(calc.buttoncos, 0, 2)
+        Grid.addWidget(calc.buttontan, 0, 3)
 
         Grid.addWidget(calc.buttonlog, 1, 0)
         Grid.addWidget(calc.buttonln, 1, 1)
@@ -110,17 +148,141 @@ class Calculator(QWidget):
         Grid.setSpacing(16)
         Grid.setContentsMargins(10, 10, 10, 10)
 
-        container = QWidget()
-        container.setObjectName("calculator_screen_container")
-        layout = QVBoxLayout(container)
-        layout.addWidget(calc.history)
-        layout.addWidget(calc.display)
+    #create independent buttons
+    def poly_mode_layout(calc):
+        layout = QGridLayout(calc.poly_mode)
+        
+        # Create NEW buttons specific to poly mode , completely independent from normal mode
+        poly_buttonmode = QPushButton("mode", calc)
+        poly_buttonx = QPushButton("x", calc)
+        poly_buttonpower = QPushButton("^", calc)
+        poly_buttonadd = QPushButton("+", calc)
+        poly_buttonsub = QPushButton("-", calc)
+        poly_buttonequal = QPushButton("=", calc)
+        poly_buttonclear = QPushButton("C", calc)
+        poly_buttonbackspace = QPushButton("←", calc)
+        poly_buttonsolve = QPushButton("SOLVE", calc)
+        
+        poly_button0 = QPushButton("0", calc)
+        poly_button1 = QPushButton("1", calc)
+        poly_button2 = QPushButton("2", calc)
+        poly_button3 = QPushButton("3", calc)
+        poly_button4 = QPushButton("4", calc)
+        poly_button5 = QPushButton("5", calc)
+        poly_button6 = QPushButton("6", calc)
+        poly_button7 = QPushButton("7", calc)
+        poly_button8 = QPushButton("8", calc)
+        poly_button9 = QPushButton("9", calc)
+        
+        #Connect all poly buttons to DisplayText (separate from normal mode buttons)
+        poly_buttons_display = [
+            poly_buttonx, poly_buttonpower, poly_buttonadd, poly_buttonsub,
+            poly_buttonequal, poly_buttonclear, poly_buttonbackspace,
+            poly_button0, poly_button1, poly_button2, poly_button3, poly_button4,
+            poly_button5, poly_button6, poly_button7, poly_button8, poly_button9
+        ]
+        
+        #Connect DisplayText and SoundEffects to poly buttons
+        for btn in poly_buttons_display:
+            btn.clicked.connect(calc.DisplayText)
+            btn.clicked.connect(calc.SoundEffects)
+        
+        #Connect special buttons
+        poly_buttonsolve.clicked.connect(calc.SolvePolynomial)
+        poly_buttonsolve.clicked.connect(calc.SoundEffects)
+        poly_buttonmode.clicked.connect(calc.mode_toggle)
+        poly_buttonmode.clicked.connect(calc.SoundEffects)
+        
+        #Layout
+        # Row 0: mode
+        layout.addWidget(poly_buttonmode, 0, 0, 1, 4)
+        
+        # Row 1: x, ^, +, -
+        layout.addWidget(poly_buttonx, 1, 0)
+        layout.addWidget(poly_buttonpower, 1, 1)
+        layout.addWidget(poly_buttonadd, 1, 2)
+        layout.addWidget(poly_buttonsub, 1, 3)
+        
+        # Row 2: C, ←, =, SOLVE
+        layout.addWidget(poly_buttonclear, 2, 0)
+        layout.addWidget(poly_buttonbackspace, 2, 1)
+        layout.addWidget(poly_buttonequal, 2, 2)
+        layout.addWidget(poly_buttonsolve, 2, 3)
+        
+        # Row 3-6: Number pad (7-9, 4-6, 1-3, 0)
+        layout.addWidget(poly_button7, 3, 0)
+        layout.addWidget(poly_button8, 3, 1)
+        layout.addWidget(poly_button9, 3, 2)
+        layout.addWidget(poly_button0, 3, 3)  # 0 on top row for space
+        
+        layout.addWidget(poly_button4, 4, 0)
+        layout.addWidget(poly_button5, 4, 1)
+        layout.addWidget(poly_button6, 4, 2)
+        
+        layout.addWidget(poly_button1, 5, 0)
+        layout.addWidget(poly_button2, 5, 1)
+        layout.addWidget(poly_button3, 5, 2)
+        
+        # Add spacing
+        layout.setSpacing(16)
+        layout.setContentsMargins(10, 10, 10, 10)
 
-        main = QVBoxLayout()
-        main.setSpacing(12)
-        main.addWidget(container)
-        main.addLayout(Grid)
-        calc.setLayout(main)
+    def SolvePolynomial(calc):
+        try:
+            expression = calc.display.text()
+            
+            # Check if expression contains '='
+            if '=' not in expression:
+                calc.display.setText("Error: Need =")
+                QTimer.singleShot(1500, lambda: calc.display.setText("0"))
+                return
+             # Split by '=' and parse
+            left, right = expression.split('=')
+
+            def add_multiplication(expr):
+                result = ""
+                for i in range(len(expr)):
+                    result += expr[i]  # Add current character
+                    # Check if we need to add '*'
+                    if i < len(expr) - 1:  # Make sure there's a next character
+                        if expr[i].isdigit() and expr[i+1] == 'x':
+                            result += '*'  # Add multiplication sign
+                return result
+
+            left = add_multiplication(left)
+            right = add_multiplication(right)
+            #replace ^ with **
+            left = left.replace('^', '**')
+            right = right.replace('^', '**')
+            
+            # Create equation: left - right = 0
+            x = sympy.Symbol('x')
+            equation = sympy.sympify(left) - sympy.sympify(right)
+            
+            # Solve the equation
+            solutions = sympy.solve(equation, x)
+            
+            if not solutions:
+                calc.display.setText("No solution")
+                QTimer.singleShot(1500, lambda: calc.display.setText("0"))
+                return
+            
+            # Format solutions
+            if len(solutions) == 1:
+                result = f"x = {solutions[0]}"
+            else:
+                result = "x = " + ", ".join([str(sol) for sol in solutions])
+                if "I" in result: result= result.replace("I", "i")
+            
+            # Update display and history
+            calc.display.setText(result)
+            calc.history_list.append(f"{expression} → {result}")
+            calc.history_list = calc.history_list[-3:]
+            calc.history.setText("  ||  ".join(calc.history_list))
+            
+        except Exception as e:
+            calc.display.setText("Error")
+            QTimer.singleShot(1500, lambda: calc.display.setText("0"))
 
     def Style(calc):
         try:
@@ -145,7 +307,7 @@ class Calculator(QWidget):
 
                 #HANDLE BACKSPACE
                 elif sender.text() == "←":
-                    if current_text in ["0", "Error"]:
+                    if current_text in ["0", "Error", "No solution"]:
                         return
                     if len(current_text) == 1:
                         calc.display.setText("0")
@@ -153,7 +315,7 @@ class Calculator(QWidget):
                         calc.display.setText(current_text[:-1])
                     return
 
-                #Auto-bracket
+                #Auto-bracket (only in normal mode)
                 elif sender.text() in ["sin", "cos", "tan", "log", "ln"]:
                     if current_text == "0":
                         calc.display.setText(sender.text() + "(")
@@ -161,8 +323,18 @@ class Calculator(QWidget):
                         calc.display.setText(current_text + sender.text() + "(")
                     return
 
-                #HANDLE EVALUATION (=)
+                #HANDLE EVALUATION (=) - Different behavior based on mode
                 elif sender.text() == "=":
+                    # In polynomial mode, just add = to the expression (don't evaluate)
+                    if calc.current_mode == "poly":
+                        if current_text == "0":
+                            return  # Don't start with =
+                        if "=" in current_text:
+                            return  # Only one = allowed
+                        calc.display.setText(current_text + "=")
+                        return
+                    
+                    # In normal mode, evaluate the expression
                     user_expression = current_text
 
                     replacements = {
@@ -211,18 +383,33 @@ class Calculator(QWidget):
                     input_char = sender.text()
 
                     # If current display is 0 or Error, replace it with the new digit
-                    if current_text in ["0", "Error"]:
-                        if input_char in "+-×/)=^.": # Don't start with these
-                            return
-                        calc.display.setText(input_char)
+                    if current_text in ["0", "Error", "No solution"]:
+                        #In poly mode, allow starting with 'x' or numbers
+                        if calc.current_mode == "poly":
+                            if input_char in "+-×/)^.":
+                                return
+                            calc.display.setText(input_char)
+                        else:
+                            # In normal mode, don't allow starting with operators
+                            if input_char in "+-×/)=^.":
+                                return
+                            calc.display.setText(input_char)
                     else:
+                        #In poly mode, allow 'x' to be added
                         # Prevent double operators (e.g., ++ or *+)
                         if input_char in "+-×/^." and current_text[-1] in "+-×/^.":
                             return
                         
-                        # Special rule for %: only allow operators after it
+                        # Special rule for %: only allow operators after it (normal mode only)
                         if current_text[-1] == "%" and input_char not in "+-×/":
                             return
+                        
+                        #In poly mode, prevent adding operators after '='
+                        if calc.current_mode == "poly" and "=" in current_text:
+                            # After =, only allow numbers, x, +, -, ^
+                            if input_char not in "0123456789x+-^":
+                                return
+                        
                         calc.display.setText(current_text + input_char)
 
             except ZeroDivisionError:
@@ -284,7 +471,6 @@ def main():
     calc.setWindowIcon(QIcon(icon_path))
     calc.show()
     sys.exit(app.exec())
-
 
 if __name__ == "__main__":
     main()
