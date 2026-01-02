@@ -1,7 +1,15 @@
 🧮 SigmaZ Calculator
 
 Latest Version: Beta 2.0.0
+
+
+
+
 <img width="413" height="697" alt="Screenshot 2026-01-02 164052" src="https://github.com/user-attachments/assets/34374a33-9c78-475d-ad43-46efe19e3054" />
+
+
+
+
 
 <img width="430" height="694" alt="Screenshot 2026-01-02 164209" src="https://github.com/user-attachments/assets/f71dac51-8378-468c-a31b-c5b45e1713a6" />
 
